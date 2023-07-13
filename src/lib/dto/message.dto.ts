@@ -4,8 +4,9 @@ import {
     IsString,
 } from 'class-validator';
 import { User } from '@app/schemas';
+import { Message as BaseMessage } from '@app/schemas';
 
-export class CreateMessageDto {
+export class CreateMessageDto extends BaseMessage {
     @IsNotEmpty()
     @IsString()
     readonly message: string;
