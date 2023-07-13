@@ -9,7 +9,7 @@ export class Message extends Document {
   user: User;
 
   @Prop({ required: true })
-  text: string;
+  message: string;
 
   @Prop({ default: dateAndTime.format(new Date(), 'hh:mm:ss A, MM-DD-YYYY') })
   date: string;
