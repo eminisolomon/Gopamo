@@ -13,4 +13,4 @@ import { MessageSchema } from '@app/schemas';
   controllers: [MessageController],
   providers: [MessageService],
 })
-export class BookModule {}
+export class MessageModule {}

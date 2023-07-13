@@ -29,7 +29,6 @@ export class MessageController {
         @Body() message: CreateMessageDto,
         @Param('username') username: string,
     ): Promise<Message> {
-        const recipientUser = await this.message.getUserByUsername(username);
-        return this.message.create(message, recipientUser._id);
+        return this.message.create(message, username);
     }
 }

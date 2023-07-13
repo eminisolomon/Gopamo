@@ -5,8 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Message } from '@app/schemas';
-import { User } from '@app/schemas';
+import { Message, User } from '@app/schemas';
 import { Query } from 'express-serve-static-core';
 import { CreateMessageDto } from '@app/dto';
 
@@ -15,8 +14,6 @@ export class MessageService {
     constructor(
         @InjectModel(Message.name)
         private messageModel: mongoose.Model<Message>,
-        @InjectModel(User.name)
-        private userModel: mongoose.Model<User>,
     ) { }
 
     async create(message: CreateMessageDto, recipientUserId: string): Promise<Message> {
@@ -28,14 +25,6 @@ export class MessageService {
 
         const savedMessage = await this.messageModel.create(data);
         return savedMessage;
-    }
-
-    async getUserByUsername(username: string): Promise<User> {
-        const user = await this.userModel.findOne({ username });
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
-        return user;
     }
 
     async messages(query: Query, user: User): Promise<Message[]> {
