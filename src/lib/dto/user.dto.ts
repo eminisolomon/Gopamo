@@ -26,3 +26,5 @@ export class SignUpDto {
     @MinLength(6)
     readonly password: string;
 }
+
+export class UpdateUserDto extends SignUpDto {}
