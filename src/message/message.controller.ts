@@ -30,6 +30,20 @@ export class messagesController {
         }
     }
 
+    @Get(':id')
+    async getMessageById(@Param('id') id: string, @Res() res: Response): Promise<IMessage> {
+        try {
+            const oneMessage: IMessage = await this.messagesService.getMessage(id);
+            res.status(HttpStatus.OK).json({
+                message: 'Message',
+                oneMessage,
+            });
+            return oneMessage;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     @Post('/:username')
     async sendMessage(
         @Param('username') username: string,

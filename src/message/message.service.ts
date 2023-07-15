@@ -20,6 +20,19 @@ export class MessageService {
         }
     }
 
+    async getMessage(messageId: string): Promise<IMessage> {
+        try {
+            const message: IMessage = await this.messageModel.findById(messageId);
+            if (!message) {
+                throw new NotFoundException(`Message with ID '${messageId}' not found`);
+            }
+            return message;
+        } catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }
+
     async sendMessage(username: string, messageDto: CreateMessageDto): Promise<IMessage> {
         try {
             const user: IUser = await this.userModel.findOne({ username });
