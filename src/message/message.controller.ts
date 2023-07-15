@@ -30,7 +30,7 @@ export class messagesController {
         }
     }
 
-    @Post(':username')
+    @Post('/:username')
     async sendMessage(
         @Param('username') username: string,
         @Body() messageDto: CreateMessageDto,
@@ -51,7 +51,7 @@ export class messagesController {
         }
     }
 
-    @Get('total')
+    @Get('/total')
     async getTotalNumberOfMessages(@Res() res: Response): Promise<number> {
         try {
             const totalMessages: number = await this.messagesService.getTotalNumberOfMessages();
