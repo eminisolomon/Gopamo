@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './user/user.module';
 import { MessageModule } from './message/message.module';
+import { PollModule } from './poll/poll.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MessageModule } from './message/message.module';
     AuthModule,
     MessageModule,
     UsersModule,
+    PollModule,
   ],
   controllers: [AppController],
   providers: [AppService],
