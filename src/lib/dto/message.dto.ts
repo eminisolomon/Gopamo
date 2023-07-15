@@ -4,13 +4,12 @@ import {
     IsString,
 } from 'class-validator';
 import { User } from '@app/schemas';
-import { Message as BaseMessage } from '@app/schemas';
 
-export class CreateMessageDto extends BaseMessage {
+export class CreateMessageDto {
     @IsNotEmpty()
     @IsString()
     readonly message: string;
 
-    @IsEmpty({ message: 'You cannot pass user id' })
+    @IsEmpty()
     readonly user: User;
 }

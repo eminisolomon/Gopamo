@@ -79,4 +79,18 @@ export class UsersController {
             console.log(e);
         }
     }
+
+    @Get(':username')
+    async getUsername(@Param('username') username: 'username', @Res() res: Response): Promise<IUser> {
+        try {
+            const user: IUser = await this.usersService.findOne(username);
+            res.status(HttpStatus.OK).json({
+                message: 'User',
+                user,
+            });
+            return user;
+        } catch (e) {
+            console.log(e);
+        }
+    }
 }

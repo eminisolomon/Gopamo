@@ -1,34 +1,67 @@
 import {
-    Body,
     Controller,
     Get,
     Param,
     Post,
-    Query,
-    Req,
-    UseGuards,
+    Body,
+    Res,
+    HttpStatus,
 } from '@nestjs/common';
-import { MessageService } from './message.service';
 import { CreateMessageDto } from '@app/dto';
-import { Message, User } from "@app/schemas";
-import { Query as ExpressQuery } from 'express-serve-static-core';
-import { AuthGuard } from '@nestjs/passport';
+import { MessageService } from './message.service';
+import { Response } from 'express';
+import { IMessage } from '@app/interfaces';
 
-@Controller('message')
-export class MessageController {
-    constructor(private message: MessageService) { }
+@Controller('messages')
+export class messagesController {
+    constructor(private readonly messagesService: MessageService) { }
 
     @Get()
-    @UseGuards(AuthGuard())
-    async getMessages(@Query() query: ExpressQuery, @Req() req): Promise<Message[]> {
-        return this.message.messages(query, req.user);
+    async getMessages(@Res() res: Response): Promise<IMessage[]> {
+        try {
+            const messages: IMessage[] = await this.messagesService.getMessages();
+            res.status(HttpStatus.OK).json({
+                message: 'messages',
+                messages,
+            });
+            return messages;
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     @Post(':username')
-    async createMessage(
-        @Body() message: CreateMessageDto,
+    async sendMessage(
         @Param('username') username: string,
-    ): Promise<Message> {
-        return this.message.create(message, username);
+        @Body() messageDto: CreateMessageDto,
+        @Res() res: Response,
+    ): Promise<IMessage> {
+        try {
+            const newMessage: IMessage = await this.messagesService.sendMessage(
+                username,
+                messageDto,
+            );
+            res.status(HttpStatus.OK).json({
+                message: 'New message',
+                messages: newMessage,
+            });
+            return newMessage;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    @Get('total')
+    async getTotalNumberOfMessages(@Res() res: Response): Promise<number> {
+        try {
+            const totalMessages: number = await this.messagesService.getTotalNumberOfMessages();
+            res.status(HttpStatus.OK).json({
+                message: 'Total number of messages',
+                totalMessages,
+            });
+            return totalMessages;
+        } catch (e) {
+            console.log(e);
+        }
     }
 }
