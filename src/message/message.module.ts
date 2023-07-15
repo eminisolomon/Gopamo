@@ -1,19 +1,26 @@
 import { Module } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { messagesController } from './message.controller';
-import { MessageSchema } from '@app/schemas';
+import { MessageSchema, UserSchema } from '@app/schemas';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UsersModule } from '@app/user/user.module';
+import { UsersService } from '@app/user/user.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: 'products',
+        name: 'messages',
         schema: MessageSchema,
       },
+      {
+        name: 'users',
+        schema: UserSchema,
+      },
     ]),
+    UsersModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, UsersService],
   controllers: [messagesController],
 })
-export class ProductsModule { }
+export class MessageModule {}
