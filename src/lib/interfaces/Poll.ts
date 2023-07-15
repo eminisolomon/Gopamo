@@ -7,4 +7,5 @@ export interface IPoll extends Document {
     options: { option: string; votes: number }[];
     duration: number;
     voters: string[];
+    user: string;
 }

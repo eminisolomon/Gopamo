@@ -8,15 +8,33 @@ import { Response } from 'express';
 export class PollController {
     constructor(private readonly pollService: PollService) { }
 
-    @Post()
-    async createPoll(@Body() pollDto: CreatePollDto, @Res() res: Response): Promise<IPoll> {
+    @Post(':userId')
+    async createPoll(
+        @Param('userId') userId: string,
+        @Body() pollDto: CreatePollDto,
+        @Res() res: Response,
+    ): Promise<IPoll> {
         try {
-            const newPoll: IPoll = await this.pollService.createPoll(pollDto);
+            const newPoll: IPoll = await this.pollService.createPoll(userId, pollDto);
             res.status(HttpStatus.OK).json({
-                message: 'New poll created',
+                message: 'Poll created',
                 poll: newPoll,
             });
             return newPoll;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    @Get(':userId')
+    async getUserPolls(@Param('userId') userId: string, @Res() res: Response): Promise<IPoll[]> {
+        try {
+            const polls: IPoll[] = await this.pollService.getUserPolls(userId);
+            res.status(HttpStatus.OK).json({
+                message: 'User polls',
+                polls,
+            });
+            return polls;
         } catch (e) {
             console.log(e);
         }
