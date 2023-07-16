@@ -11,14 +11,15 @@ export class MessageService {
         @InjectModel('users') private readonly userModel: Model<IUser>,
     ) { }
 
-    async getMessages(): Promise<IMessage[]> {
+    async getMessages(userId: string): Promise<IMessage[]> {
         try {
-            const messages: IMessage[] = await this.messageModel.find();
+            const messages: IMessage[] = await this.messageModel.find({ user: userId });
             return messages;
         } catch (e) {
             console.log(e);
         }
     }
+
 
     async getMessage(messageId: string): Promise<IMessage> {
         try {

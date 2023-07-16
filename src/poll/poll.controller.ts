@@ -1,14 +1,26 @@
-import { Controller, Post, Get, Param, Delete, Body, Res, HttpStatus } from '@nestjs/common';
+import {
+    Controller,
+    Post,
+    Get,
+    Param,
+    Delete,
+    Body,
+    Res,
+    HttpStatus,
+    UseGuards
+} from '@nestjs/common';
 import { PollService } from './poll.service';
 import { CreatePollDto } from '@app/dto';
 import { IPoll } from '@app/interfaces';
 import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('polls')
 export class PollController {
     constructor(private readonly pollService: PollService) { }
 
     @Post(':userId')
+    @UseGuards(AuthGuard())
     async createPoll(
         @Param('userId') userId: string,
         @Body() pollDto: CreatePollDto,
@@ -27,6 +39,7 @@ export class PollController {
     }
 
     @Get(':userId')
+    @UseGuards(AuthGuard())
     async getUserPolls(@Param('userId') userId: string, @Res() res: Response): Promise<IPoll[]> {
         try {
             const polls: IPoll[] = await this.pollService.getUserPolls(userId);

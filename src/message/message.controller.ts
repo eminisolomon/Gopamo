@@ -6,20 +6,26 @@ import {
     Body,
     Res,
     HttpStatus,
+    UseGuards,
 } from '@nestjs/common';
 import { CreateMessageDto } from '@app/dto';
 import { MessageService } from './message.service';
 import { Response } from 'express';
 import { IMessage } from '@app/interfaces';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('messages')
 export class messagesController {
     constructor(private readonly messagesService: MessageService) { }
 
-    @Get()
-    async getMessages(@Res() res: Response): Promise<IMessage[]> {
+    @Get(':userId')
+    @UseGuards(AuthGuard())
+    async getMessages(
+        @Param('userId') userId: string,
+        @Res() res: Response
+    ): Promise<IMessage[]> {
         try {
-            const messages: IMessage[] = await this.messagesService.getMessages();
+            const messages: IMessage[] = await this.messagesService.getMessages(userId);
             res.status(HttpStatus.OK).json({
                 message: 'messages',
                 messages,
@@ -31,7 +37,11 @@ export class messagesController {
     }
 
     @Get(':id')
-    async getMessageById(@Param('id') id: string, @Res() res: Response): Promise<IMessage> {
+    @UseGuards(AuthGuard())
+    async getMessageById(
+        @Param('id') id: string,
+        @Res() res: Response
+    ): Promise<IMessage> {
         try {
             const oneMessage: IMessage = await this.messagesService.getMessage(id);
             res.status(HttpStatus.OK).json({
