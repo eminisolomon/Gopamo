@@ -1,15 +1,20 @@
-FROM node:alpine
+# Base image
+FROM node:18
 
-ENV NODE_ENV=production
-
+# Create app directory
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+# A wildcard is used to ensure both package.json AND yarn.lock are copied
+COPY package*.json yarn.lock ./
 
-RUN yarn install --production --immutable --inline-builds
+# Install app dependencies using Yarn
+RUN yarn install --immutable
 
+# Bundle app source
 COPY . .
 
+# Creates a "dist" folder with the production build
 RUN yarn run build
 
-CMD ["yarn", "run", "start:prod"]
+# Start the server using the production build
+CMD ["node", "dist/main.js"]
