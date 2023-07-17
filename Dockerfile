@@ -4,12 +4,12 @@ ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
 
-COPY package.json ./
+COPY package.json yarn.lock ./
 
-RUN npm install --legacy-peer-deps
+RUN yarn install --production --immutable --inline-builds
 
 COPY . .
 
-RUN npm run build
+RUN yarn run build
 
-CMD ["node", "dist/main"]
+CMD ["yarn", "run", "start:prod"]
